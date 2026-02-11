@@ -1,4 +1,5 @@
 
+
 {- TIJDELIJKE TEXT LATER WEGHALEN
 Haskell
 Json converter naar iets (start simple) als tijd over doe meer anders max 6 volgens micheal
@@ -51,18 +52,48 @@ recursion
 pattern matching
 list operations
 
+
+Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
+Maak gebruik van recursie en pattern matching om geneste objecten en arrays correct te verwerken.
+
+Waarom moet dit recursief?
+Omdat JSON genest kan zijn
+(Dat is)
+{
+  "person": {
+    "name": "Emil" <-- NESTED
+  }
+}
+---------
+IS DIT pattern matching? 
+
+Als tekst begint met '{' → Object
+Als tekst begint met '[' → Array
+Als tekst begint met '"' → String
+Als tekst = true/false → Bool
+Als tekst = null → Null
+Anders →  value/int ?
+
 -}
 
 main::IO ()
 main = do
-    print (function 7)
-    print (doEuclidische 48 18)
+    print ()
+    print ()
 
-function:: Int -> Int
-function a =  3 + a
+-- JSON input → Parse → Transform → Plain text → Print / Save
+--What type is JSON? --> convert --> String
 
-doEuclidische:: Int -> Int -> Int
-doEuclidische input1 input2 = 
-    if input2 == 0
-        then input1
-        else doEuclidische input2 (input1 `mod` input2)
+{-
+data JSON
+    = JObject [(String, JSON)]
+    | JArray [JSON]
+    | JString String
+    | JNumber Double
+    | JBool Bool
+    | JNull
+
+    wat is Data.Aeson?
+-}
+jsonConverter:: Int -> String -- Moet recursie hebben en? Pattern macthing?
+jsonConverter a = "WIP" 
