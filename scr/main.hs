@@ -1,3 +1,4 @@
+import Distribution.Utils.Json (Json)
 
 
 {- TIJDELIJKE TEXT LATER WEGHALEN
@@ -75,12 +76,6 @@ Als tekst = null → Null
 Anders →  value/int ?
 
 -}
-
-main::IO ()
-main = do
-    print ()
-    print ()
-
 -- JSON input → Parse → Transform → Plain text → Print / Save
 --What type is JSON? --> convert --> String
 
@@ -95,5 +90,11 @@ data JSON
 
     wat is Data.Aeson?
 -}
-jsonConverter:: Int -> String -- Moet recursie hebben en? Pattern macthing?
-jsonConverter a = "WIP" 
+main::IO ()
+main = do
+  contents <- readFile  "inputfile.json" --of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
+  print contents -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
+
+
+jsonPasers:: String -> String -- Moet recursie hebben en? Pattern macthing?
+jsonPasers a = "WIP" 
