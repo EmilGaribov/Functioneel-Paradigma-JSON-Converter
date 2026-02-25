@@ -1,11 +1,10 @@
 import Distribution.Utils.Json (Json)
 
-
 {- TIJDELIJKE TEXT LATER WEGHALEN
 Haskell
 Json converter naar iets (start simple) als tijd over doe meer anders max 6 volgens micheal
 {platte txt}
-{pretty maken} 
+{pretty maken}
 etc
 
 Het doel van de opdracht is om:
@@ -45,14 +44,13 @@ Because print is an IO action, and your function is pure
 ONLY THESE are pure
 +
 -
-*
+\*
 /
 mod
 if statements
 recursion
 pattern matching
 list operations
-
 
 Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
 Maak gebruik van recursie en pattern matching om geneste objecten en arrays correct te verwerken.
@@ -66,7 +64,7 @@ Omdat JSON genest kan zijn
   }
 }
 ---------
-IS DIT pattern matching? 
+IS DIT pattern matching?
 
 Als tekst begint met '{' → Object
 Als tekst begint met '[' → Array
@@ -77,7 +75,7 @@ Anders →  value/int ?
 
 -}
 -- JSON input → Parse → Transform → Plain text → Print / Save
---What type is JSON? --> convert --> String
+-- What type is JSON? --> convert --> String
 
 {-
 data JSON
@@ -90,16 +88,23 @@ data JSON
 
     wat is Data.Aeson?
 -}
-main::IO ()
+main :: IO ()
 main = do
-  contents <- readFile  "inputfile.json" --of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
-  --print contents -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
+  contents <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
+  -- print contents -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
   print (jsonPaser contents)
 
--- we halen nu de n en de '' weg maar hoe doet ik dit voor alles? dan heb ik een soort table/array nodig zodat ik de guards niet te groot word.
-jsonPaser:: String -> String -- Moet recursie hebben en? Pattern macthing?  -- guards zijn hading bij pattern macthing
+
+jsonPaser :: String -> String -- Moet recursie hebben en? Pattern macthing?  -- guards zijn hading bij pattern macthing
 jsonPaser [] = []
-jsonPaser (x:xs)
-  | x == '\n' = jsonPaser xs
-  | x == ' '  = jsonPaser xs
-  | otherwise = x : jsonPaser xs
+jsonPaser (x : xs)
+  | x == '\n' = jsonPaser xs -- remove newlines
+  | x == ' ' = jsonPaser xs -- remove spaces
+  | x == '{' = jsonPaser xs -- remove braces
+  | x == '}' = jsonPaser xs
+  | x == '"' = jsonPaser xs -- remove quotes
+  | x == '\\' = jsonPaser xs -- remove backslash if any
+  | x == ',' = ',' : ' ' : jsonPaser xs -- keep comma + space
+  | x == ':' = ':' : ' ' : jsonPaser xs -- add space after colon
+
+  -- Non-exhaustive patterns in function jsonPaser????
