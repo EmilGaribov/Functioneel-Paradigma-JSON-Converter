@@ -93,8 +93,13 @@ data JSON
 main::IO ()
 main = do
   contents <- readFile  "inputfile.json" --of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
-  print contents -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
+  --print contents -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
+  print (jsonPaser contents)
 
-
-jsonPasers:: String -> String -- Moet recursie hebben en? Pattern macthing?
-jsonPasers a = "WIP" 
+-- we halen nu de n en de '' weg maar hoe doet ik dit voor alles? dan heb ik een soort table/array nodig zodat ik de guards niet te groot word.
+jsonPaser:: String -> String -- Moet recursie hebben en? Pattern macthing?  -- guards zijn hading bij pattern macthing
+jsonPaser [] = []
+jsonPaser (x:xs)
+  | x == '\n' = jsonPaser xs
+  | x == ' '  = jsonPaser xs
+  | otherwise = x : jsonPaser xs
