@@ -77,34 +77,22 @@ Anders →  value/int ?
 -- JSON input → Parse → Transform → Plain text → Print / Save
 -- What type is JSON? --> convert --> String
 
-{-
-data JSON
-    = JObject [(String, JSON)]
-    | JArray [JSON]
-    | JString String
-    | JNumber Double
-    | JBool Bool
-    | JNull
-
-    wat is Data.Aeson?
--}
 main :: IO ()
 main = do
-  contents <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
-  -- print contents -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
-  print (jsonPaser contents)
+  jsonFileContent <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
+  print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
+  print (jsonPaser jsonFileContent) -- "name:Emil,age:24"
 
-
-jsonPaser :: String -> String -- Moet recursie hebben en? Pattern macthing?  -- guards zijn hading bij pattern macthing
+jsonPaser :: String -> String 
 jsonPaser [] = []
 jsonPaser (x : xs)
-  | x == '\n' = jsonPaser xs -- remove newlines
-  | x == ' ' = jsonPaser xs -- remove spaces
-  | x == '{' = jsonPaser xs -- remove braces
+  | x == '\n' = jsonPaser xs 
+  | x == ' ' = jsonPaser xs 
+  | x == '{' = jsonPaser xs
   | x == '}' = jsonPaser xs
-  | x == '"' = jsonPaser xs -- remove quotes
-  | x == '\\' = jsonPaser xs -- remove backslash if any
-  | x == ',' = ',' : ' ' : jsonPaser xs -- keep comma + space
-  | x == ':' = ':' : ' ' : jsonPaser xs -- add space after colon
+  | x == '"' = jsonPaser xs 
+  | x == '\\' = jsonPaser xs
+  | otherwise = x : jsonPaser xs
 
   -- Non-exhaustive patterns in function jsonPaser????
+  -- Ik kreeg deze omdat ik de otherwise niet had :P
