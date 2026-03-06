@@ -1,0 +1,2 @@
+--Zoek uit hoe ik Unit tests maak in Haskell
+-- Ook hier Docstring/comments

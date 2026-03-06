@@ -1,6 +1,7 @@
 import Distribution.Utils.Json (Json)
 import Distribution.SPDX (LicenseId(JSON))
 
+
 {- TIJDELIJKE TEXT LATER WEGHALEN
 leg uit welke functionele concepten je hebt toegepast en hoe ze bijdragen aan de oplossing.
 Schrijf een kort rapport (ongeveer 4-6 pagina’s)
@@ -28,7 +29,7 @@ main = do
   print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
   print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
 
-jsonToPlainText :: String -> String 
+jsonToPlainText :: String -> String -- soort van flatten
 jsonToPlainText [] = []
 jsonToPlainText (x : xs)
   | x == '\n' = jsonToPlainText xs 
@@ -52,6 +53,29 @@ data JSON
   | JNull                     
   deriving (Show, Eq)
 
+-- jsonParser:: ? -> ?
+-- hier alles methodes aanroepen
+
+-- dit zou moeten kijk wat voor type het is
+parseValue:: String -> JSON
+parseValue s
+  | head s == '"' = parseString s
+  | head s == '{' = parseObject s
+  | head s == '[' = parseArray s
+  | s == "true"   = JBool True
+  | s == "false"  = JBool False
+  | s == "null"   = JNull
+  | otherwise     = parseNumber s
+
+-- dit handled enkle strings
+parseString:: String -> JSON
+parseString s =
+    let inner = init (tail s) 
+    in JString inner
 
 
--- plainTextToJson :: String -> String
+--We hebben met Micheal gesproken:
+{-Testen given meer punten
+onderbouwing over WAAROM ik deze manier gebruik is verwacht ook als ik niets beters weet dan zou ik moeten zoeken en of bewijzen dat ik iets anders zag/probeerde maar niet deed omdat reden X
+(Werkte Niet ,NVT , Te complex, Ik kreeg het niet werkend, )zo kan je dus uitleggen waarom je een minder goude keuze hebt gemaakt.
+-}
