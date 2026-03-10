@@ -26,9 +26,11 @@ Omdat JSON genest kan zijn
 main :: IO ()
 main = do
   jsonFileContent <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
-  print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
-  print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
-
+  --print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
+  --print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
+  let parsed = parseObject jsonFileContent
+  print parsed
+  
 jsonToPlainText :: String -> String -- soort van flatten
 jsonToPlainText [] = []
 jsonToPlainText (x : xs)
@@ -59,13 +61,13 @@ data JSON
 -- dit zou moeten kijk wat voor type het is
 parseValue:: String -> JSON
 parseValue s
-  | head s == '"' = parseString s
+  | head s == '"' = JString (parseString s)
   | head s == '{' = parseObject s
-  | head s == '[' = parseArray s
+--  | head s == '[' = parseArray s
   | s == "true"   = JBool True
   | s == "false"  = JBool False
   | s == "null"   = JNull
-  | otherwise     = parseNumber s
+ -- | otherwise     = parseNumber s --moet zoals parseString
 
 -- dit handled enkle string nu ik toe heb gevoed is het meer afgebakend omdat het "escaped charc" kan handle en het gebruikt recersion :D
 parseString :: String -> String
@@ -76,12 +78,42 @@ parseString ('\\':'\\':xs) = '\\' : parseString xs
 parseString (x:xs)         = x : parseString xs
 
 -- alles lijk een string te zijn kom in nu achter :P 
-parseObject :: String -> JSON -- makes JObject
+parseObject :: String -> JSON
 parseObject input =
-  let inner = init (tail input) --cleans { and } -- Init haalt eerste weg en tail haalt laatse weg
--- clean ,dots ,check other fields
-  in JObject []      
+  let inner = init (tail input)           -- remove { and }
+      parts = splitTopLevel inner        -- split top-level commas
+      pairs = map parsePair parts        -- parse each key:value pair
+  in JObject pairs
 
+parsePair :: String -> (String, JSON)
+parsePair s =
+  let (keyPart, rest) = break (== ':') s
+      key = parseString (trim keyPart)
+      value = parseValue (trim (tail rest))
+  in (key, value)
+
+trim :: [Char] -> [Char]
+trim = f . f
+  where f = reverse . dropWhile (`elem` " \n\t")
+
+
+{-splitTopLevel splits a JSON string into top-level key/value pairs.
+Keeps track of nesting depth to ignore commas inside {} or [].
+Recursive approach with current and results makes it functional and pure.-}
+splitTopLevel :: String -> [String]
+splitTopLevel str = go str 0 "" []
+  where
+    go [] _ current results -- basecase
+      | null current = results
+      | otherwise    = results ++ [current]
+    go (c:cs) depth current results --recursie 
+      | isOpen c  = go cs (depth + 1) (current ++ [c]) results
+      | isClose c = go cs (depth - 1) (current ++ [c]) results
+      | isComma c && depth == 0 = go cs depth "" (results ++ [current])
+      | otherwise = go cs depth (current ++ [c]) results
+    isOpen c = c == '{' || c == '['
+    isClose c = c == '}' || c == ']'
+    isComma c = c == ','
 
 
 
