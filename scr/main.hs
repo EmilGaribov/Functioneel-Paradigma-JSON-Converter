@@ -31,8 +31,8 @@ main = do
   let parsed = parseArray jsonFileContent
   print parsed
   
-jsonToPlainText :: String -> String -- soort van flatten
-jsonToPlainText [] = []
+jsonToPlainText :: String -> String -- soort van flatten 
+jsonToPlainText [] = [] -- deze method was lijkt redundant te geworden zijn mogelijk een helper voor flatten maken?
 jsonToPlainText (x : xs)
   | x == '\n' = jsonToPlainText xs 
   | x == ' ' = jsonToPlainText xs 
@@ -55,10 +55,6 @@ data JSON
   | JNull                     
   deriving (Show, Eq)
 
--- jsonParser:: ? -> ?
--- hier alles methodes aanroepen
-
--- dit zou moeten kijk wat voor type het is
 parseValue:: String -> JSON
 parseValue s
   | head s == '"' = JString (parseString s)
@@ -67,7 +63,7 @@ parseValue s
   | s == "true"   = JBool True
   | s == "false"  = JBool False
   | s == "null"   = JNull
- -- | otherwise     = parseNumber s --moet zoals parseString
+  | otherwise     = parseNumber s
 
 -- dit handled enkle string nu ik toe heb gevoed is het meer afgebakend omdat het "escaped charc" kan handle en het gebruikt recersion :D
 parseString :: String -> String
@@ -76,6 +72,9 @@ parseString ('\\':'n':xs)  = '\n' : parseString xs
 parseString ('\\':'"':xs)  = '"'  : parseString xs
 parseString ('\\':'\\':xs) = '\\' : parseString xs
 parseString (x:xs)         = x : parseString xs
+
+parseNumber :: String -> JSON
+parseNumber input = JNumber (read input) --makes input a double 
 
 parseArray :: String -> JSON
 parseArray input =
@@ -91,6 +90,7 @@ parseObject input =
       pairs = map parsePair parts        -- parse each key:value pair
   in JObject pairs
 
+---- helper functions: count = 3
 parsePair :: String -> (String, JSON)
 parsePair s =
   let (keyPart, rest) = break (== ':') s
