@@ -52,15 +52,20 @@ data JSON
   | JNull                     
   deriving (Show, Eq)
 
-parseValue:: String -> JSON
-parseValue s
-  | head s == '"' = JString (parseString s)
-  | head s == '{' = parseObject s
-  | head s == '[' = parseArray s
-  | s == "true"   = JBool True
-  | s == "false"  = JBool False
-  | s == "null"   = JNull
-  | otherwise     = parseNumber s
+parseValue :: String -> JSON
+parseValue input =
+  let s = trim input
+  in if null s
+     then error "JSON error: empty value"
+     else case head s of
+          '"' -> JString (parseString s)
+          '{' -> parseObject s
+          '[' -> parseArray s
+          _
+            | s == "true"  -> JBool True
+            | s == "false" -> JBool False
+            | s == "null"  -> JNull
+            | otherwise    -> parseNumber s
 
 -- dit handled enkle string nu ik toe heb gevoed is het meer afgebakend omdat het "escaped charc" kan handle en het gebruikt recersion :D
 parseString :: String -> String
