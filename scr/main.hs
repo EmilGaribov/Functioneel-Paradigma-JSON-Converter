@@ -28,7 +28,7 @@ main = do
   jsonFileContent <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
   --print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
   --print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
-  let parsed = parseObject jsonFileContent
+  let parsed = parseArray jsonFileContent
   print parsed
   
 jsonToPlainText :: String -> String -- soort van flatten
@@ -63,7 +63,7 @@ parseValue:: String -> JSON
 parseValue s
   | head s == '"' = JString (parseString s)
   | head s == '{' = parseObject s
---  | head s == '[' = parseArray s
+  | head s == '[' = parseArray s
   | s == "true"   = JBool True
   | s == "false"  = JBool False
   | s == "null"   = JNull
@@ -77,7 +77,13 @@ parseString ('\\':'"':xs)  = '"'  : parseString xs
 parseString ('\\':'\\':xs) = '\\' : parseString xs
 parseString (x:xs)         = x : parseString xs
 
--- alles lijk een string te zijn kom in nu achter :P 
+parseArray :: String -> JSON
+parseArray input =
+  let inner = init (tail input)  -- remove '[' and ']'
+      parts = splitTopLevel inner -- reused function splits top-level commas
+      parsed = map (parseValue . trim) parts -- parse each thing recursively
+  in JArray parsed
+
 parseObject :: String -> JSON
 parseObject input =
   let inner = init (tail input)           -- remove { and }
@@ -100,7 +106,7 @@ trim = f . f
 {-splitTopLevel splits a JSON string into top-level key/value pairs.
 Keeps track of nesting depth to ignore commas inside {} or [].
 Recursive approach with current and results makes it functional and pure.-}
-splitTopLevel :: String -> [String]
+splitTopLevel :: String -> [String] -- reuse this in array 
 splitTopLevel str = go str 0 "" []
   where
     go [] _ current results -- basecase
