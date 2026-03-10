@@ -1,6 +1,3 @@
-import Distribution.Utils.Json (Json)
-import Distribution.SPDX (LicenseId(JSON))
-
 
 {- TIJDELIJKE TEXT LATER WEGHALEN
 leg uit welke functionele concepten je hebt toegepast en hoe ze bijdragen aan de oplossing.
@@ -28,7 +25,7 @@ main = do
   jsonFileContent <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
   --print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
   --print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
-  let parsed = parseArray jsonFileContent
+  let parsed = parseValue jsonFileContent
   print parsed
   
 jsonToPlainText :: String -> String -- soort van flatten 
@@ -78,25 +75,40 @@ parseNumber input = JNumber (read input) --makes input a double
 
 parseArray :: String -> JSON
 parseArray input =
-  let inner = init (tail input)  -- remove '[' and ']'
-      parts = splitTopLevel inner -- reused function splits top-level commas
-      parsed = map (parseValue . trim) parts -- parse each thing recursively
-  in JArray parsed
+  case trim input of 
+    ('[':xs) ->
+      if null xs || last xs /= ']'
+      then error "JSON error: missing closing ']' in array"
+      else
+        let inner  = trim (init xs)
+            parts  = if null inner then [] else splitTopLevel inner
+            parsed = map (parseValue . trim) parts
+        in JArray parsed
+    _ -> error "JSON error: array must start with '['"
 
 parseObject :: String -> JSON
 parseObject input =
-  let inner = init (tail input)           -- remove { and }
-      parts = splitTopLevel inner        -- split top-level commas
-      pairs = map parsePair parts        -- parse each key:value pair
-  in JObject pairs
+  case trim input of
+    ('{':xs) ->
+      if null xs || last xs /= '}'
+      then error "JSON error: missing closing '}' in object"
+      else
+        let inner = trim (init xs)
+            parts = if null inner then [] else splitTopLevel inner
+            pairs = map (parsePair . trim) parts
+        in JObject pairs
+    _ -> error "JSON error: object must start with '{'"
 
----- helper functions: count = 3
-parsePair :: String -> (String, JSON)
+---- helper functions: count = 3parsePair :: String -> (String, JSON)
+parsePair :: [Char] -> (String, JSON)
 parsePair s =
   let (keyPart, rest) = break (== ':') s
-      key = parseString (trim keyPart)
-      value = parseValue (trim (tail rest))
-  in (key, value)
+  in if null rest
+     then error "JSON error: missing ':' in object pair"
+     else
+       let key = parseString (trim keyPart)
+           value = parseValue (trim (tail rest))
+       in (key, value)
 
 trim :: [Char] -> [Char]
 trim = f . f
