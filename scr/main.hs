@@ -67,11 +67,23 @@ parseValue s
   | s == "null"   = JNull
   | otherwise     = parseNumber s
 
--- dit handled enkle strings
-parseString:: String -> JSON
-parseString s =
-    let inner = init (tail s) 
-    in JString inner
+-- dit handled enkle string nu ik toe heb gevoed is het meer afgebakend omdat het "escaped charc" kan handle en het gebruikt recersion :D
+parseString :: String -> String
+parseString [] = []
+parseString ('\\':'n':xs)  = '\n' : parseString xs
+parseString ('\\':'"':xs)  = '"'  : parseString xs
+parseString ('\\':'\\':xs) = '\\' : parseString xs
+parseString (x:xs)         = x : parseString xs
+
+-- alles lijk een string te zijn kom in nu achter :P 
+parseObject :: String -> JSON -- makes JObject
+parseObject input =
+  let inner = init (tail input) --cleans { and } -- Init haalt eerste weg en tail haalt laatse weg
+-- clean ,dots ,check other fields
+  in JObject []      
+
+
+
 
 
 --We hebben met Micheal gesproken:

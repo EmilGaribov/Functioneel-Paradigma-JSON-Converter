@@ -28,4 +28,4 @@ Het doel van deze opdracht is een Functinele Json Parser te maken in Haskell
 ## **Conclusie**
 
 ## **Bronvermelding**
-- *Onthoud dat je de PROMPTS van GPT moet opgeven of de Chatlink geeft.*
+- *Onthoud dat je de PROMPTS van GPT moet opgeven of de Chatlink geeft in APP style (APPA genartor).*
