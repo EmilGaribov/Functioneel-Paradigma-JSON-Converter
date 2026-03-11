@@ -15,3 +15,4 @@ Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructu
 Maak gebruik van recursie en pattern matching om geneste objecten en arrays correct te verwerken.
 -}
 
+-- PS C:\Users\Denla\Documents\GitHub\Functioneel-Paradigma-JSON-Converter\src> runghc "c:\Users\Denla\Documents\GitHub\Functioneel-Paradigma-JSON-Converter\src\main.hs"

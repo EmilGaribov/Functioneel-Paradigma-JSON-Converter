@@ -2,7 +2,9 @@ cradle:
   direct:
     arguments:
       - "-isrc"
+      - "-itest"
       - "src/Main.hs"
+      - "-isrc"
       - "src/JSONTypes.hs"
       - "src/JSONParser.hs"
       - "src/JSONPrinter.hs"

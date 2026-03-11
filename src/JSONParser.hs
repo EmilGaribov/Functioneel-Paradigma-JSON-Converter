@@ -64,12 +64,12 @@ parsePair s =
            value = parseValue (trim (tail rest))
        in (key, value)
 
--- Helpers
+------ Helpers functies
 trim :: String -> String
 trim = f . f
   where f = reverse . dropWhile (`elem` " \n\t")
 
-splitTopLevel :: String -> [String]
+splitTopLevel :: String -> [String] --mvp method
 splitTopLevel str = go str 0 "" []
   where
     go [] _ current results
