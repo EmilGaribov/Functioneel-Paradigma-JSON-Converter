@@ -3,7 +3,7 @@ Schrijf een kort rapport (ongeveer 4-6 pagina’s) dat voldoet aan de richtlijne
 
 # ToDo
 - Add tests
-- More Functions (Text->Json)
+- flatten
 - Add docstring/comment to code (Explain what it does)
 - Work in Rapport (Explain why)
 - Keep commiting

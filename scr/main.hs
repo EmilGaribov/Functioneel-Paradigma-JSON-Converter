@@ -27,17 +27,23 @@ main = do
   --print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
   let parsed = parseValue jsonFileContent
   print parsed
-  
-jsonToPlainText :: String -> String -- soort van flatten 
-jsonToPlainText [] = [] -- deze method was lijkt redundant te geworden zijn mogelijk een helper voor flatten maken?
-jsonToPlainText (x : xs)
-  | x == '\n' = jsonToPlainText xs 
-  | x == ' ' = jsonToPlainText xs 
-  | x == '{' = jsonToPlainText xs
-  | x == '}' = jsonToPlainText xs
-  | x == '"' = jsonToPlainText xs 
-  | x == '\\' = jsonToPlainText xs
-  | otherwise = x : jsonToPlainText xs
+  putStrLn (flattenValue parsed)
+
+flattenValue :: JSON -> String
+flattenValue (JString s) = s
+flattenValue (JNumber n) = show n
+flattenValue (JBool b) = if b then "true" else "false"
+flattenValue JNull = "null"
+
+flattenValue (JArray xs) =
+  "[" ++ concatMap (\x -> flattenValue x ++ ", ") xs ++ "]"
+
+flattenValue (JObject pairs) =
+  concatMap flattenPair pairs
+  where
+    flattenPair (k,v) =
+      k ++ ": " ++ flattenValue v ++ "\n"
+
 
 -- Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
 
@@ -69,11 +75,13 @@ parseValue input =
 
 -- dit handled enkle string nu ik toe heb gevoed is het meer afgebakend omdat het "escaped charc" kan handle en het gebruikt recersion :D
 parseString :: String -> String
-parseString [] = []
-parseString ('\\':'n':xs)  = '\n' : parseString xs
-parseString ('\\':'"':xs)  = '"'  : parseString xs
-parseString ('\\':'\\':xs) = '\\' : parseString xs
-parseString (x:xs)         = x : parseString xs
+parseString s = go (init (tail s))
+  where
+    go [] = []
+    go ('\\':'n':xs)  = '\n' : go xs
+    go ('\\':'"':xs)  = '"'  : go xs
+    go ('\\':'\\':xs) = '\\' : go xs
+    go (x:xs)         = x : go xs
 
 parseNumber :: String -> JSON
 parseNumber input = JNumber (read input) --makes input a double 
