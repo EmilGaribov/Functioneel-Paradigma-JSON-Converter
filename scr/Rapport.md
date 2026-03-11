@@ -1,5 +1,7 @@
 ## **Rapport**
 Schrijf een kort rapport (ongeveer 4-6 pagina’s) dat voldoet aan de richtlijnen van de AIM-controlekaart.
+leg uit welke functionele concepten je hebt toegepast en hoe ze bijdragen aan de oplossing.
+Schrijf een kort rapport (ongeveer 4-6 pagina’s)
 
 # ToDo
 - Add tests

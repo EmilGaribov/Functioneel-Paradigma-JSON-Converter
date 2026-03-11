@@ -1,6 +1,56 @@
 {
-  "name": "Emil",
-  "age": 24,
-  "numbers": [1,2,3],
-  "active": true
+  "school": {
+    "naam": "HAN",
+    "locatie": "Arnhem",
+    "opleidingen": [
+      {
+        "naam": "Informatica",
+        "studenten": [
+          {
+            "naam": "Emil",
+            "leeftijd": 21,
+            "vakken": [
+              {
+                "naam": "Programming",
+                "cijfer": 8.2
+              },
+              {
+                "naam": "Databases",
+                "cijfer": 7.5
+              }
+            ]
+          },
+          {
+            "naam": "Sara",
+            "leeftijd": 22,
+            "vakken": [
+              {
+                "naam": "Programming",
+                "cijfer": 9.0
+              },
+              {
+                "naam": "AI",
+                "cijfer": 8.7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "naam": "Communicatie",
+        "studenten": [
+          {
+            "naam": "Tom",
+            "leeftijd": 20,
+            "vakken": [
+              {
+                "naam": "Marketing",
+                "cijfer": 7.8
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

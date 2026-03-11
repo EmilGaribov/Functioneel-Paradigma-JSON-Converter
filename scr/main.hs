@@ -1,30 +1,12 @@
 
-{- TIJDELIJKE TEXT LATER WEGHALEN
-leg uit welke functionele concepten je hebt toegepast en hoe ze bijdragen aan de oplossing.
-Schrijf een kort rapport (ongeveer 4-6 pagina’s)
--}
-
 {-
 Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
 Maak gebruik van recursie en pattern matching om geneste objecten en arrays correct te verwerken.
-
-Waarom moet dit recursief?
-Omdat JSON genest kan zijn
-(Dat is)
-{
-  "person": {
-    "name": "Emil" <-- NESTED
-  }
-}
 -}
--- JSON input → Parse → Transform → Plain text → Print / Save
--- What type is JSON? --> convert --> String
 
 main :: IO ()
 main = do
-  jsonFileContent <- readFile "inputfile.json" -- of dit mag ligt aan hoeveel Functinal code ik nog kan toepassen
-  --print jsonFileContent -- "{\n  \"name\": \"Emil\",\n  \"age\": 24\n}\n"
-  --print (jsonToPlainText jsonFileContent) -- "name:Emil,age:24"
+  jsonFileContent <- readFile "inputfile.json" -- Ik kan dit niet zonder deze funcntie want dit raak de OS aan dat kan ik niet zelf
   let parsed = parseValue jsonFileContent
   print parsed
   putStrLn (flattenValue parsed)
@@ -44,10 +26,6 @@ flattenValue (JObject pairs) =
     flattenPair (k,v) =
       k ++ ": " ++ flattenValue v ++ "\n"
 
-
--- Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
-
---datastuctuur (Patternmatching)
 -- dit is een Haskell algebraic data type (ADT).== Custom type
 data JSON
   = JObject [(String, JSON)] 
@@ -73,7 +51,6 @@ parseValue input =
             | s == "null"  -> JNull
             | otherwise    -> parseNumber s
 
--- dit handled enkle string nu ik toe heb gevoed is het meer afgebakend omdat het "escaped charc" kan handle en het gebruikt recersion :D
 parseString :: String -> String
 parseString s = go (init (tail s))
   where
@@ -131,7 +108,7 @@ trim = f . f
 {-splitTopLevel splits a JSON string into top-level key/value pairs.
 Keeps track of nesting depth to ignore commas inside {} or [].
 Recursive approach with current and results makes it functional and pure.-}
-splitTopLevel :: String -> [String] -- reuse this in array 
+splitTopLevel :: String -> [String] -- MVP method
 splitTopLevel str = go str 0 "" []
   where
     go [] _ current results -- basecase
@@ -145,12 +122,3 @@ splitTopLevel str = go str 0 "" []
     isOpen c = c == '{' || c == '['
     isClose c = c == '}' || c == ']'
     isComma c = c == ','
-
-
-
-
---We hebben met Micheal gesproken:
-{-Testen given meer punten
-onderbouwing over WAAROM ik deze manier gebruik is verwacht ook als ik niets beters weet dan zou ik moeten zoeken en of bewijzen dat ik iets anders zag/probeerde maar niet deed omdat reden X
-(Werkte Niet ,NVT , Te complex, Ik kreeg het niet werkend, )zo kan je dus uitleggen waarom je een minder goude keuze hebt gemaakt.
--}
