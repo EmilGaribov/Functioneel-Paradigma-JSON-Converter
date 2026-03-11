@@ -1,40 +1,6 @@
+module JSONParser (parseValue) where
 
-{-
-Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
-Maak gebruik van recursie en pattern matching om geneste objecten en arrays correct te verwerken.
--}
-
-main :: IO ()
-main = do
-  jsonFileContent <- readFile "inputfile.json" -- Ik kan dit niet zonder deze funcntie want dit raak de OS aan dat kan ik niet zelf
-  let parsed = parseValue jsonFileContent
-  print parsed
-  putStrLn (flattenValue parsed)
-
-flattenValue :: JSON -> String
-flattenValue (JString s) = s
-flattenValue (JNumber n) = show n
-flattenValue (JBool b) = if b then "true" else "false"
-flattenValue JNull = "null"
-
-flattenValue (JArray xs) =
-  "[" ++ concatMap (\x -> flattenValue x ++ ", ") xs ++ "]"
-
-flattenValue (JObject pairs) =
-  concatMap flattenPair pairs
-  where
-    flattenPair (k,v) =
-      k ++ ": " ++ flattenValue v ++ "\n"
-
--- dit is een Haskell algebraic data type (ADT).== Custom type
-data JSON
-  = JObject [(String, JSON)] 
-  | JArray [JSON]             
-  | JString String            
-  | JNumber Double            
-  | JBool Bool                
-  | JNull                     
-  deriving (Show, Eq)
+import JSONTypes ( JSON(..) )
 
 parseValue :: String -> JSON
 parseValue input =
@@ -45,11 +11,10 @@ parseValue input =
           '"' -> JString (parseString s)
           '{' -> parseObject s
           '[' -> parseArray s
-          _
-            | s == "true"  -> JBool True
-            | s == "false" -> JBool False
-            | s == "null"  -> JNull
-            | otherwise    -> parseNumber s
+          _   | s == "true"  -> JBool True
+              | s == "false" -> JBool False
+              | s == "null"  -> JNull
+              | otherwise    -> parseNumber s
 
 parseString :: String -> String
 parseString s = go (init (tail s))
@@ -61,7 +26,7 @@ parseString s = go (init (tail s))
     go (x:xs)         = x : go xs
 
 parseNumber :: String -> JSON
-parseNumber input = JNumber (read input) --makes input a double 
+parseNumber input = JNumber (read input)
 
 parseArray :: String -> JSON
 parseArray input =
@@ -89,8 +54,7 @@ parseObject input =
         in JObject pairs
     _ -> error "JSON error: object must start with '{'"
 
----- helper functions: count = 3parsePair :: String -> (String, JSON)
-parsePair :: [Char] -> (String, JSON)
+parsePair :: String -> (String, JSON)
 parsePair s =
   let (keyPart, rest) = break (== ':') s
   in if null rest
@@ -100,21 +64,18 @@ parsePair s =
            value = parseValue (trim (tail rest))
        in (key, value)
 
-trim :: [Char] -> [Char]
+-- Helpers
+trim :: String -> String
 trim = f . f
   where f = reverse . dropWhile (`elem` " \n\t")
 
-
-{-splitTopLevel splits a JSON string into top-level key/value pairs.
-Keeps track of nesting depth to ignore commas inside {} or [].
-Recursive approach with current and results makes it functional and pure.-}
-splitTopLevel :: String -> [String] -- MVP method
+splitTopLevel :: String -> [String]
 splitTopLevel str = go str 0 "" []
   where
-    go [] _ current results -- basecase
+    go [] _ current results
       | null current = results
       | otherwise    = results ++ [current]
-    go (c:cs) depth current results --recursie 
+    go (c:cs) depth current results
       | isOpen c  = go cs (depth + 1) (current ++ [c]) results
       | isClose c = go cs (depth - 1) (current ++ [c]) results
       | isComma c && depth == 0 = go cs depth "" (results ++ [current])

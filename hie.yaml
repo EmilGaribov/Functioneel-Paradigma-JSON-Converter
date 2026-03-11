@@ -1,0 +1,9 @@
+cradle:
+  direct:
+    arguments:
+      - "-isrc"
+      - "src/Main.hs"
+      - "src/JSONTypes.hs"
+      - "src/JSONParser.hs"
+      - "src/JSONPrinter.hs"
+    
