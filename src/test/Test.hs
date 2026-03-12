@@ -13,7 +13,7 @@ onderbouwing over WAAROM ik deze manier gebruik is verwacht ook als ik niets bet
 module Main where
 
 import Test.HUnit ( assertEqual, runTestTT, assertString,Test(..) )
-import JSONTypes ( JSON(JString,JNumber) )
+import JSONTypes ( JSON(JString,JNumber, JArray) )
 import JSONParser (parseValue, parseString , parseArray , parseObject)
 
 
@@ -22,16 +22,31 @@ testJNumber = TestCase (assertEqual "Check of getal klopt" --wat je checkt
                         (JNumber 42.0)   --Verwacht
                         (parseValue "42")) --Echte antwoord
 
+testStringEmpty :: Test
+testStringEmpty = TestCase (assertEqual "Check of hij leeg is" "" (parseString ""))
 
-testJStringEmpty :: Test
-testJStringEmpty = TestCase (assertEqual "Check of hij leeg is" "" (parseString ""))
+testStringEscapedCharacters :: Test
+testStringEscapedCharacters = 
+    TestCase (assertEqual "Check if escaped charc stays escaped after becoming JString"
+         "Hallo\nWereld"
+         (parseString "\"Hallo\\nWereld\""))
 
+testArrayEmpty :: Test
+testArrayEmpty = TestCase (assertEqual "Check of de array leeg is" (JArray []) (parseArray "[]" ))
+
+testArrayNested :: Test
+testArrayNested = TestCase (assertEqual "Nested array wordt correct geparsed" 
+        (JArray [JArray [JNumber 0 ]])  
+        (parseValue "[[0]]"))
 
 tests :: Test
 tests = TestList [
                 TestLabel "Number Test" testJNumber,
-                TestLabel "Empty String Test"testJStringEmpty 
-                 ] 
+                TestLabel "Empty String Test" testStringEmpty,
+                TestLabel "Ecscaped String Test" testStringEscapedCharacters,
+                TestLabel "Is de Array leeg?" testArrayEmpty,
+                TestLabel "Nested array word geparsed" testArrayNested
+                 ]
 
 
 main :: IO ()
