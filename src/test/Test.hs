@@ -13,7 +13,7 @@ onderbouwing over WAAROM ik deze manier gebruik is verwacht ook als ik niets bet
 module Main where
 
 import Test.HUnit ( assertEqual, runTestTT, assertString,Test(..) )
-import JSONTypes ( JSON(JString,JNumber, JArray) )
+import JSONTypes ( JSON(JString,JNumber, JArray, JObject) )
 import JSONParser (parseValue, parseString , parseArray , parseObject)
 
 
@@ -26,18 +26,24 @@ testStringEmpty :: Test
 testStringEmpty = TestCase (assertEqual "Check of hij leeg is" "" (parseString ""))
 
 testStringEscapedCharacters :: Test
-testStringEscapedCharacters = 
+testStringEscapedCharacters =
     TestCase (assertEqual "Check if escaped charc stays escaped after becoming JString"
          "Hallo\nWereld"
          (parseString "\"Hallo\\nWereld\""))
 
 testArrayEmpty :: Test
-testArrayEmpty = TestCase (assertEqual "Check of de array leeg is" (JArray []) (parseArray "[]" ))
+testArrayEmpty = TestCase $ assertEqual "Check of de array leeg is" (JArray []) (parseArray "[]" )
 
 testArrayNested :: Test
-testArrayNested = TestCase (assertEqual "Nested array wordt correct geparsed" 
-        (JArray [JArray [JNumber 0 ]])  
-        (parseValue "[[0]]"))
+testArrayNested = TestCase $ assertEqual "nested array parsing" (JArray [JArray [JNumber 0.0]]) (parseValue "[[0.0]]")
+
+testObjectEmpty :: Test
+testObjectEmpty = TestCase $ assertEqual "Controleer of hij leeg is" (JObject []) (parseObject "{}")
+
+testObjectNested :: Test
+testObjectNested = TestCase $ assertEqual "Object word correct geparsed" 
+    (JObject [("outer", JObject [("inner", JString "kip")])])
+    (parseValue "{\"outer\": {\"inner\": \"kip\"}}")
 
 tests :: Test
 tests = TestList [
@@ -45,7 +51,11 @@ tests = TestList [
                 TestLabel "Empty String Test" testStringEmpty,
                 TestLabel "Ecscaped String Test" testStringEscapedCharacters,
                 TestLabel "Is de Array leeg?" testArrayEmpty,
-                TestLabel "Nested array word geparsed" testArrayNested
+                TestLabel "Nested array word geparsed" testArrayNested,
+                TestLabel "Kijk of Object leeg is" testObjectEmpty,
+                TestLabel "Nested Object Parsen" testObjectNested
+
+
                  ]
 
 
