@@ -12,27 +12,28 @@ onderbouwing over WAAROM ik deze manier gebruik is verwacht ook als ik niets bet
 
 module Main where
 
-import Test.HUnit ( assertEqual, runTestTT, Test(..) )
+import Test.HUnit ( assertEqual, runTestTT, assertString,Test(..) )
 import JSONTypes ( JSON(JString,JNumber) )
-import JSONParser (parseValue)
+import JSONParser (parseValue, parseString , parseArray , parseObject)
 
--- Je test case
-testJString :: Test
-testJString = TestCase (assertEqual "Moet een JString teruggeven" 
-                        (JString "Hallo") 
-                        (parseValue "\"Hallo\""))
 
--- Een test voor getallen
 testJNumber :: Test
-testJNumber = TestCase (assertEqual "Check of getal klopt" 
-                        (JNumber 42.0) 
-                        (parseValue "42"))
+testJNumber = TestCase (assertEqual "Check of getal klopt" --wat je checkt
+                        (JNumber 42.0)   --Verwacht
+                        (parseValue "42")) --Echte antwoord
 
--- De lijst met alle tests
+
+testJStringEmpty :: Test
+testJStringEmpty = TestCase (assertEqual "Check of hij leeg is" "" (parseString ""))
+
+
 tests :: Test
-tests = TestList [TestLabel "String Test" testJString , TestLabel "Number Test" testJNumber] 
+tests = TestList [
+                TestLabel "Number Test" testJNumber,
+                TestLabel "Empty String Test"testJStringEmpty 
+                 ] 
 
--- De functie die alles start
+
 main :: IO ()
 main = do
     result <- runTestTT tests

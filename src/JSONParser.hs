@@ -1,4 +1,4 @@
-module JSONParser (parseValue) where
+module JSONParser (parseValue, parseArray , parseNumber , parseString ,parseObject , splitTopLevel) where
 
 import JSONTypes ( JSON(..) )
 
@@ -17,7 +17,9 @@ parseValue input =
               | otherwise    -> parseNumber s
 
 parseString :: String -> String
-parseString s = go (init (tail s))
+parseString s 
+  | length s < 2 = []
+  | otherwise = go (init (tail s))
   where
     go [] = []
     go ('\\':'n':xs)  = '\n' : go xs
