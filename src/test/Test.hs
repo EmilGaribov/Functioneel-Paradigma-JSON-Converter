@@ -14,7 +14,7 @@ module Main where
 
 import Test.HUnit ( assertEqual, runTestTT, assertString,Test(..) )
 import JSONTypes ( JSON(JString,JNumber, JArray, JObject) )
-import JSONParser (parseValue, parseString , parseArray , parseObject)
+import JSONParser (parseValue, parseString , parseArray , parseObject , splitTopLevel)
 
 
 testJNumber :: Test
@@ -45,6 +45,22 @@ testObjectNested = TestCase $ assertEqual "Object word correct geparsed"
     (JObject [("outer", JObject [("inner", JString "kip")])])
     (parseValue "{\"outer\": {\"inner\": \"kip\"}}")
 
+testNestedArraySplit :: Test
+testNestedArraySplit = TestCase $ assertEqual "Test een nested array de juiste comma handled" 
+    ["[1,2]","[3,4]"]
+    (splitTopLevel "[1,2],[3,4]")
+
+testNestedObjectSplit ::Test
+testNestedObjectSplit = TestCase $ assertEqual "Test een Nested object comma handling" 
+    ["{\"a\":1}","{\"b\":2}"]
+    (splitTopLevel "{\"a\":1},{\"b\":2}")
+
+testNestedNumbersArraysAndObjects :: Test
+testNestedNumbersArraysAndObjects = TestCase $ assertEqual "Mix van numbers, objects and arrays die worden correct gehandled door de functie"
+    ["1","{\"a\":[2,3]}","4"]
+    (splitTopLevel "1,{\"a\":[2,3]},4")
+
+
 tests :: Test
 tests = TestList [
                 TestLabel "Number Test" testJNumber,
@@ -53,11 +69,11 @@ tests = TestList [
                 TestLabel "Is de Array leeg?" testArrayEmpty,
                 TestLabel "Nested array word geparsed" testArrayNested,
                 TestLabel "Kijk of Object leeg is" testObjectEmpty,
-                TestLabel "Nested Object Parsen" testObjectNested
-
-
+                TestLabel "Nested Object Parsen" testObjectNested,
+                TestLabel "Test of de functie array commas goed verwerkt" testNestedArraySplit,
+                TestLabel "Test of de commas in het object correct worden verwerkt " testNestedObjectSplit,
+                TestLabel "" testNestedNumbersArraysAndObjects
                  ]
-
 
 main :: IO ()
 main = do
