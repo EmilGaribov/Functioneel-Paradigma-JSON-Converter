@@ -20,6 +20,7 @@ Functioneel-Paradigma-JSON-Converter/
 
 - Haskell compiler (GHC)
 - HUnit library voor testen (cabal install HUnit of via Stack)
+- yaml file (``hie.yaml``) om de modules te kunnen spliten van main.
 
 # Gebruik
 ### Runnen van de JSON parser
