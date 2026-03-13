@@ -19,23 +19,7 @@ parseValue input =
               | s == "null"  -> JNull
               | otherwise    -> parseNumber s
 
--- parseValue :: String -> Maybe JSON
--- parseValue input =
---   let s = trim input
---   in case head s of
---           '"' -> Just ( JString (parseString s))
---           '{' -> Just (parseObject s)
---           '[' -> Just (parseArray s)
---           _   | s == "true"  -> Just (JBool True)
---               | s == "false" -> Just (JBool False)
---               | s == "null"  -> Just (JNull)
---               | otherwise    -> Just (parseNumber s)
--- parseValue _ = Nothing
 
-
--- | Parseert een JSON string literal.
---   Verwijdert de omringende quotes en verwerkt escape sequences
---   zoals \n, \" en \\.
 parseString :: String -> String
 parseString s 
   | length s < 2 = []

@@ -1,6 +1,3 @@
-# ToDo
-- Add docstring/comment to code (Explain what it does)
-
 # **Title: JSON Parser Paradigma Opdracht**
 * **Versienummer**: 1
 * **Studentnaam**: Emil
@@ -321,22 +318,28 @@ go (c:cs) depth current results
 
 **D**oor deze opdracht heb ik meer inzicht/beeld gekregen in hoe functioneel programmeren werkt en hoe deze concepten in de praktijk (*Werkvloer*) kunnen worden toegepast bij het bouwen van algoritmes zoals een parser.
 
-## **Bronvermelding**
-- *Onthoud dat je de PROMPTS van GPT moet opgeven of de Chatlink geeft in APP style (APPA genartor).*
-
-### APPA
-
-ChatGPT:Hulp met Tests: https://chatgpt.com/c/69b2c461-c7ac-8329-8fb1-90c337a0e692
-
-### Uitelg AI
 
 ## Gebruik van AI
 
-**T**ijdens deze opdracht heb ik gebruik gemaakt van een AI-tool (ChatGPT) als ondersteuning bij het schrijven van mijn verslag en het verduidelijken van bepaalde concepten.
+**T**ijdens deze opdracht heb ik gebruik gemaakt van een AI-tool (ChatGPT) als ondersteuning bij zowel het schrijven van mijn verslag als tijdens het programmeren van de JSON parser.
 
-**A**I is voornamelijk gebruikt voor:
-- Het verbeteren van de structuur en formulering van tekst in dit document.
-- Het verduidelijken van uitleg over functionele concepten zoals recursie en pattern matching.
-- Het geven van feedback op stukken tekst zodat deze duidelijker en beter gestructureerd werden.
+**A**I heb ik gebruikt om uitleg te krijgen over de **syntax van Haskell**, omdat ik nog nieuw was met deze programmeertaal. Dit hielp mij beter te begrijpen hoe bepaalde functies geschreven moeten worden, hoe pattern matching werkt en hoe concepten zoals **guards** en hulpfuncties (zoals een recursieve `go` functie) gebruikt kunnen worden in een implementatie.
 
-**D**e implementatie van de JSON parser, het algoritme en de uiteindelijke code zijn door mijzelf ontworpen en geschreven. AI is hierbij alleen gebruikt als hulpmiddel voor uitleg en controle, vergelijkbaar met het raadplegen van documentatie.
+**D**aarnaast heb ik AI gebruikt om beter te begrijpen wat **ADT’s (Algebraic Data Types)** zijn en hoe deze gebruikt kunnen worden om een datastructuur zoals JSON te modelleren. Ook heb ik AI gebruikt om meer inzicht te krijgen in **wat een JSON parser doet**, hoe JSON-structuren eruitzien en hoe deze met recursie verwerkt kunnen worden.
+
+**T**ijdens het programmeren heb ik AI ook gebruikt als hulpmiddel bij het **oplossen van fouten**, het begrijpen van compiler-meldingen en het verbeteren van mijn code. Dit omvatte onder andere hulp bij **import-problemen tussen modules**, kleine **refactorings van code**, en het bedenken van alternatieve manieren om bepaalde **functie-implementaties** op te bouwen.
+
+**T**ot slot heb ik AI gebruikt om beter te begrijpen hoe **tests** geschreven kunnen worden en om feedback te krijgen op de **structuur en formulering van dit verslag**.
+
+**D**e uiteindelijke implementatie van de JSON parser, de algoritmes en de meeste code zijn door mijzelf geschreven. AI is voornamelijk gebruikt als ondersteunend hulpmiddel voor uitleg, debugging en feedback, vergelijkbaar met het raadplegen van documentatie.
+
+## **Bronvermelding**
+ChatGPT. (2026). ChatGPT conversatie over Haskell en JSON parser. OpenAI. https://chatgpt.com/c/69b2c461-c7ac-8329-8fb1-90c337a0e692
+
+ChatGPT. (2026). ChatGPT conversatie over Haskell en functionele concepten. OpenAI. https://chatgpt.com/c/69b005e3-508c-8332-91f7-4c7a827948c0
+
+Haskell.org. (2026). Haskell documentation. https://www.haskell.org/documentation/
+
+AIM-CNI. (2026). APP opdrachtomschrijving – Paradigma challenge nakijkmodel. https://aim-cni.github.io/app/docs/Paradigma%20challenge/nakijkmodel
+
+
