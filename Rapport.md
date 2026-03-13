@@ -4,11 +4,10 @@ leg uit welke functionele concepten je hebt toegepast en hoe ze bijdragen aan de
 Schrijf een kort rapport (ongeveer 4-6 pagina’s)
 
 # ToDo
-- Add tests
-- flatten
+
 - Add docstring/comment to code (Explain what it does)
 - Work in Rapport (Explain why)
-- Keep commiting
+
 
 # **Title: JSON Parser Paradigma Opdracht**
 * **Versienummer**: 1
@@ -31,3 +30,5 @@ Het doel van deze opdracht is een Functinele Json Parser te maken in Haskell
 
 ## **Bronvermelding**
 - *Onthoud dat je de PROMPTS van GPT moet opgeven of de Chatlink geeft in APP style (APPA genartor).*
+
+ChatGPT:Hulp met Tests: https://chatgpt.com/c/69b2c461-c7ac-8329-8fb1-90c337a0e692

@@ -2,6 +2,9 @@ module JSONParser (parseValue, parseArray , parseNumber , parseString ,parseObje
 
 import JSONTypes ( JSON(..) )
 
+-- | Parseert een JSON string naar een JSON ADT waarde.
+--   Detecteert het type (string, object, array, bool, null of number)
+--   op basis van het eerste karakter van de input.
 parseValue :: String -> JSON
 parseValue input =
   let s = trim input
@@ -16,6 +19,10 @@ parseValue input =
               | s == "null"  -> JNull
               | otherwise    -> parseNumber s
 
+
+-- | Parseert een JSON string literal.
+--   Verwijdert de omringende quotes en verwerkt escape sequences
+--   zoals \n, \" en \\.
 parseString :: String -> String
 parseString s 
   | length s < 2 = []
@@ -27,9 +34,16 @@ parseString s
     go ('\\':'\\':xs) = '\\' : go xs
     go (x:xs)         = x : go xs
 
+
+-- | Parseert een JSON numerieke waarde naar een JNumber.
+--   Gebruikt Haskell's 'read' om de string naar een Double te converteren.
 parseNumber :: String -> JSON
 parseNumber input = JNumber (read input)
 
+
+-- | Parseert een JSON array.
+--   Splitst de elementen op top-level komma's en parseert elk element
+--   afzonderlijk met 'parseValue'.
 parseArray :: String -> JSON
 parseArray input =
   case trim input of 
@@ -43,6 +57,9 @@ parseArray input =
         in JArray parsed
     _ -> error "JSON error: array must start with '['"
 
+
+-- | Parseert een JSON object.
+--   Verdeelt de inhoud in key-value paren en parseert elk paar.
 parseObject :: String -> JSON
 parseObject input =
   case trim input of
@@ -56,6 +73,10 @@ parseObject input =
         in JObject pairs
     _ -> error "JSON error: object must start with '{'"
 
+
+-- | Parseert een key-value paar binnen een JSON object.
+--   De key wordt verwacht als een JSON string en de value kan
+--   elke geldige JSON waarde zijn.
 parsePair :: String -> (String, JSON)
 parsePair s =
   let (keyPart, rest) = break (== ':') s
@@ -66,12 +87,17 @@ parsePair s =
            value = parseValue (trim (tail rest))
        in (key, value)
 
------- Helpers functies
+
+-- | Verwijdert whitespace aan het begin en einde van een string.
 trim :: String -> String
 trim = f . f
   where f = reverse . dropWhile (`elem` " \n\t")
 
-splitTopLevel :: String -> [String] --mvp method
+
+-- | Splitst een JSON lijst of object op top-level komma's.
+--   Houdt rekening met geneste arrays en objecten zodat
+--   interne komma's niet verkeerd worden gesplitst.
+splitTopLevel :: String -> [String]
 splitTopLevel str = go str 0 "" []
   where
     go [] _ current results
