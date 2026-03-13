@@ -1,20 +1,5 @@
-## **Rapport**
-Schrijf een kort rapport (ongeveer 4-6 pagina’s) dat voldoet aan de richtlijnen van de AIM-controlekaart.
-leg uit welke functionele concepten je hebt toegepast en hoe ze bijdragen aan de oplossing.
-Schrijf een kort rapport (ongeveer 4-6 pagina’s)
-
 # ToDo
 - Add docstring/comment to code (Explain what it does)
-- Work in Rapport (Explain why)
---
- Hoe diep moet het zijn?
- zo min mogelijk teasers
- "Ik vond dit erg goed"
-(Wat maakt het dan goed)
---
-Niet alles is puur doordat ik Error handling erin heb gestopt
-Dat is niet erg zolang ik kan vertellen dat ik weet dat dit niet puur meer is en uitleggen waarom ik dit niet puur heb gemaakt en waarom ik dit niet heb opgelost als ik wist dat het niet puur is. (bv geen tijd over)
---
 
 # **Title: JSON Parser Paradigma Opdracht**
 * **Versienummer**: 1
@@ -218,6 +203,8 @@ data JSON
 ## **Challenge: JSON Parser**
 **D**e uitdaging was om een JSON-parser te bouwen die JSON-bestanden kan inlezen en omzetten naar een interne datastructuur (``JSON ADT``). Het ging hierbij niet alleen om eenvoudige waarden zoals strings, nummers, booleans en null, maar vooral om geneste objecten (``JObject``) en arrays (``JArray``) correct te verwerken. Omdat JSON-data een recursieve structuur kan hebben – objecten kunnen arrays bevatten, die op hun beurt weer objecten bevatten – moest de parser recursief en modulair zijn opgebouwd.
 
+**I**k heb ook **UNIT** - **T E S T S** gemaakt voor mijn code.
+
 ### Dit was uitdagend omdat
 **I**k moest nadenken. Ik Funtioneel moest nadenken over immutability en elke bewerking een nieuwe waarde geven zonder de input string aante passen waardoor dit moeijlijker was dan een imperatieve taal zoals Java.
 
@@ -289,17 +276,67 @@ Recursie zorgt ervoor dat geneste arrays en objecten correct verwerkt worden.
 
 
 ## **Reflectie** !!
- --Wat heb je geleerd / Wat werkte goed of juist niet?
-
 **W**at heb ik nou geleerd dat is een goede vraag.
 
+**T**ijdens deze opdracht heb ik geleerd om problemen op een functionele manier op te lossen. In plaats van variabelen aan te passen zoals in imperatieve talen (``Java``), moest ik werken met ``immutability``. Dit betekent dat data niet wordt aangepast, maar dat elke functie een nieuwe waarde teruggeeft.
+
+**D**it was vooral merkbaar bij functies zoals ``parseString``. In deze functie wordt stap voor stap een nieuwe string opgebouwd met behulp van ``recursie``, in plaats van een bestaande string te wijzigen. Je kunt dit zien als het gebruiken van een oude waarde om een nieuwe waarde te maken.
+
+**O**ok heb ik geleerd hoe ``pattern matching`` kan worden gebruikt om verschillende soorten input te herkennen. Samen met ``recursie`` blijkt dit een handige combinatie te zijn bij het verwerken van genested data.
+
+**I**n ``parseValue`` wordt bijvoorbeeld het eerste karakter van een string bekeken om te bepalen welk type JSON-waarde het is. Op basis hiervan wordt de juiste **parsefunctie** aangeroepen. Hierdoor kan de parser makkelijk bepalen hoe de input verwerkt moet worden.
+
+**D**aarnaast heb ik geleerd wat een ``ADT`` (Algebraic Data Type) is en hoe deze gebruikt kan worden om een datastructuur te maken. In mijn project wordt de ``JSON ADT`` gebruikt om alle mogelijke JSON-waarden te 'representeren'. Hierdoor kan Haskell met behulp van ``pattern matching`` eenvoudig bepalen hoe een bepaalde waarde verwerkt moet worden. Dit liet mij zien hoe krachtig ``ADT’s`` zijn bij het modelleren van complexere data.
+
+**T**ijdens het programmeren merkte ik ook dat meerdere functionele concepten vaak tegelijk worden gebruikt. Bijvoorbeeld:
+
+(Higher-Order Function & First-Class Function)
+```Haskell 
+parsed = map (parseValue . trim) parts
+```
+
+(Onderandere Recursie & Pattern Matching)
+```Haskell 
+go (c:cs) depth current results
+  | isOpen c  = go cs (depth + 1) (current ++ [c]) results
+  | isClose c = go cs (depth - 1) (current ++ [c]) results
+  | isComma c && depth == 0 = go cs depth "" (results ++ [current])
+  | otherwise = go cs depth (current ++ [c]) results
+
+```
+###  Side note (next time)
+**T**ijdens het maken van dit verslag merkte ik dat er een aantal dingen zijn die ik achteraf anders had willen doen of verder had willen uitwerken.
+
+**D**e belangrijkste hiervan is dat sommige functies in mijn implementatie niet volledig puur meer zijn. Dit komt doordat ik gebruik heb gemaakt van error voor error handling. Op het moment dat ik dit implementeerde, begreep ik nog niet goed dat deze manier van foutafhandeling de pure functionele flow verstoort. Achteraf had ik dit liever anders opgelost, bijvoorbeeld door gebruik te maken van ``Maybe``, zodat een functie ``Nothing`` kan teruggeven wanneer er iets misgaat. Een andere mogelijkheid was om een duidelijke foutwaarde of foutmelding terug te geven in plaats van een runtime-error.
+
+**D**aarnaast had ik graag meer **tests** willen schrijven. Op dit moment heb ik voor elke **test** ongeveer twee edge cases toegevoegd, maar het was beter geweest had ik meer edges **getest**. Door tijds te kort was het helaas niet mogelijk om dit verder uit te breiden.
+
+**T**ot slot had ik mijn **projectstructuur** graag beter willen opzetten. In mijn huidige aanpak werk ik met losse bestanden, waardoor ik soms problemen kreeg met module imports. Hiervoor bestaan oplossingen zoals Cabal of Cradle, waarmee een Haskell-project beter gestructureerd kan worden. In een volgend project zou ik dit willen gebruiken om een aantal problemen te voorkomen.
 
 ## **Conclusie**
- Samenvatting van de belangrijkste leerpunten.
- Dit stuk kan ook in de reflectie 
- wat er boven staat maar dan korter (boven -- Reflectie)
+
+**I**n deze opdracht heb ik een ``JSON Parser`` gebouwd in ``Haskell`` waarbij ik verschillende functionele concepten heb toegepast. Het belangrijkste dat ik heb geleerd is hoe **recursie** en **pattern matching** gebruikt kunnen worden om geneste datastructuren zoals ``JSON`` te verwerken.
+
+**D**aarnaast heb ik beter begrepen hoe concepten zoals ``immutability``, ``higher-order functions`` en het gebruik van een ``ADT`` helpen bij het maken en verwerken van data in een functionele taal.
+
+**D**oor deze opdracht heb ik meer inzicht/beeld gekregen in hoe functioneel programmeren werkt en hoe deze concepten in de praktijk (*Werkvloer*) kunnen worden toegepast bij het bouwen van algoritmes zoals een parser.
 
 ## **Bronvermelding**
 - *Onthoud dat je de PROMPTS van GPT moet opgeven of de Chatlink geeft in APP style (APPA genartor).*
 
+### APPA
+
 ChatGPT:Hulp met Tests: https://chatgpt.com/c/69b2c461-c7ac-8329-8fb1-90c337a0e692
+
+### Uitelg AI
+
+## Gebruik van AI
+
+**T**ijdens deze opdracht heb ik gebruik gemaakt van een AI-tool (ChatGPT) als ondersteuning bij het schrijven van mijn verslag en het verduidelijken van bepaalde concepten.
+
+**A**I is voornamelijk gebruikt voor:
+- Het verbeteren van de structuur en formulering van tekst in dit document.
+- Het verduidelijken van uitleg over functionele concepten zoals recursie en pattern matching.
+- Het geven van feedback op stukken tekst zodat deze duidelijker en beter gestructureerd werden.
+
+**D**e implementatie van de JSON parser, het algoritme en de uiteindelijke code zijn door mijzelf ontworpen en geschreven. AI is hierbij alleen gebruikt als hulpmiddel voor uitleg en controle, vergelijkbaar met het raadplegen van documentatie.
