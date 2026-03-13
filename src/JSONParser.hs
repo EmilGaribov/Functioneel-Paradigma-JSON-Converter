@@ -62,7 +62,7 @@ parseArray input =
   case trim input of 
     ('[':xs) ->
       if null xs || last xs /= ']'
-      then error "JSON error: missing closing ']' in array"
+      then error "JSON error: missing closing ']' in array" 
       else
         let inner  = trim (init xs)
             parts  = if null inner then [] else splitTopLevel inner
