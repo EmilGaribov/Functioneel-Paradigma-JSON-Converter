@@ -215,17 +215,23 @@ data JSON
   deriving (Show, Eq)
 ```
 
-## **Challenge**
-JSON Parser
+## **Challenge: JSON Parser**
+**D**e uitdaging was om een JSON-parser te bouwen die JSON-bestanden kan inlezen en omzetten naar een interne datastructuur (``JSON ADT``). Het ging hierbij niet alleen om eenvoudige waarden zoals strings, nummers, booleans en null, maar vooral om geneste objecten (``JObject``) en arrays (``JArray``) correct te verwerken. Omdat JSON-data een recursieve structuur kan hebben – objecten kunnen arrays bevatten, die op hun beurt weer objecten bevatten – moest de parser recursief en modulair zijn opgebouwd.
 
-Schrijf een JSON-parser die JSON-bestanden inleest en omzet naar een datastructuur.
-Maak gebruik van recursie en pattern matching om geneste objecten en arrays correct te verwerken.
+### Dit was uitdagend omdat
+**I**k moest nadenken. Ik Funtioneel moest nadenken over immutability en elke bewerking een nieuwe waarde geven zonder de input string aante passen waardoor dit moeijlijker was dan een imperatieve taal zoals Java.
+
+**H**et correct identificeren van de “top-level” elementen in geneste arrays en objecten was lastig omdat ik eerst niet wist hoe dit moest. Hiervoor moest een functie zoals ``splitTopLevel`` worden bedacht die diep geneste komma’s kan negeren.
+
+**O**ok moest ik goed nadenken over de basiscases en de recursieve stapen om te voorkomen dat je functies vastlopen of verkeerde waarden teruggeven.
 
 
 ## **Implementatie**
 -- Noem git
 Korte samenvatting van de implementatie 
-en ~~gebruikte functionele concepten.~~
+
+
+
 
 ## **Reflectie** !!
  --Wat heb je geleerd
