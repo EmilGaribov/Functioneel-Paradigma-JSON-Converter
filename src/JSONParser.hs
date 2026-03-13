@@ -19,11 +19,13 @@ parseValue input =
               | s == "null"  -> JNull
               | otherwise    -> parseNumber s
 
-
+-- | Verwijdert de buitenste quotes van een JSON string
+--   en verwerkt escape sequences met een recursieve helper functie.
 parseString :: String -> String
 parseString s 
   | length s < 2 = []
   | otherwise = go (init (tail s))
+      -- Recursieve functie die escape characters omzet
   where
     go [] = []
     go ('\\':'n':xs)  = '\n' : go xs
@@ -94,9 +96,11 @@ trim = f . f
 -- | Splitst een JSON lijst of object op top-level komma's.
 --   Houdt rekening met geneste arrays en objecten zodat
 --   interne komma's niet verkeerd worden gesplitst.
+--   Alleen komma's op depth 0 worden gebruikt als scheiding
 splitTopLevel :: String -> [String]
 splitTopLevel str = go str 0 "" []
   where
+      -- Recursieve helper die door de string loopt
     go [] _ current results
       | null current = results
       | otherwise    = results ++ [current]
@@ -105,6 +109,7 @@ splitTopLevel str = go str 0 "" []
       | isClose c = go cs (depth - 1) (current ++ [c]) results
       | isComma c && depth == 0 = go cs depth "" (results ++ [current])
       | otherwise = go cs depth (current ++ [c]) results
+    --  functies voor leesbaarheid
     isOpen c = c == '{' || c == '['
     isClose c = c == '}' || c == ']'
     isComma c = c == ','

@@ -1,7 +1,7 @@
 module JSONPrinter (flattenValue) where
 
 import JSONTypes ( JSON(..) )
-
+-- | Converteert een JSON waarde naar een enkelvoudige string representatie.
 flattenValue :: JSON -> String
 flattenValue (JString s) = s
 flattenValue (JNumber n) = show n
