@@ -227,14 +227,72 @@ data JSON
 
 
 ## **Implementatie**
--- Noem git
-Korte samenvatting van de implementatie 
 
+### Korte samenvatting van de implementatie 
 
+**D**e parser leest een JSON-bestand in en zet dit om naar een interne datastructuur, de ``JSON`` ADT. Deze structuur ondersteunt:
+
+- Strings (``JString``), nummers (``JNumber``), booleans (``JBool``) en null (``JNull``).
+- Geneste objecten (``JObject``) en arrays (``JArray``).
+
+**D**e parser is modulair opgebouwd:
+
+1. ``JSONTypes.hs`` – definieert de ``JSON`` ADT.
+
+2. ``JSONParser.hs`` – bevat functies om strings, nummers, arrays en objecten te parsen.
+
+    - ``parseValue`` bepaalt het type JSON-waarde en roept de juiste parsefunctie aan.
+
+    - ``parseString`` verwerkt escape-tekens en verwijdert aanhalingstekens.
+
+    - ``parseArray`` en ``parseObject`` gebruiken recursie en ``splitTopLevel`` om geneste structuren correct te verwerken.
+
+    - ``splitTopLevel`` splits een ``JSON`` ``Object`` of ``Array`` op top-level komma's en houd rekening met nested cases.
+
+3. ``JSONPrinter.hs`` – bevat ``flattenValue``, die een ``JSON`` ADT omzet naar een schoone stringrepresentatie.
+
+**A**lle code wordt beheerd met ``Git``, waardoor commits eenvoudig te bekijken zijn.
+
+### Uitleg van de implementatie
+
+1. **Detectie van JSON-type**
+
+**D**e functie ``parseValue`` bekijkt het eerste karakter van de input om te bepalen welk type JSON-waarde wordt geparsed:
+
+- ``"..." → parseString``
+- ``{...} → parseObject``
+- ``[...] → parseArray``
+- ``true``, ``false``, ``null`` → respectievelijk ``JBool`` of ``JNull``
+- Anders → ``parseNumber``
+
+2. **Strings parsen**
+
+``parseString`` **V**erwijdert de omringende aanhalingstekens en verwerkt escape sequences zoals ``\n``, ``\"`` en ``\\``. Het bouwt recursief een nieuwe string op, waarbij elke stap een nieuw karakter toevoegt.
+
+3. **Arrays en objecten parsen**
+
+``parseArray`` **E**n ``parseObject`` splitsen de inhoud op top-level komma’s via ``splitTopLevel``.
+Elk element of key-value paar wordt afzonderlijk geparsed met ``parseValue``.
+Recursie zorgt ervoor dat geneste arrays en objecten correct verwerkt worden.
+
+4. **Top-level splitsing**
+
+**D**e functie ``splitTopLevel`` houdt bij hoe diep genest een element zit, zodat interne komma’s van geneste arrays of objecten niet verkeerd worden gesplitst.
+
+5. **Flattenen van JSON**
+
+``flattenValue`` **Z**et de ``JSON`` ADT om naar een string, waarbij arrays en objecten recursief worden verwerkt. Strings, nummers, booleans en null worden direct omgezet naar een stringrepresentatie.
+
+6. **Error handling**
+
+**B**ij ongeldige JSON wordt een foutmelding gegooid via ``error``, bijvoorbeeld bij een ontbrekende ``]`` of ``}``. Dit maakt sommige functies niet volledig puur, maar dit was een nodig vooral bij het testen.
 
 
 ## **Reflectie** !!
- --Wat heb je geleerd
+ --Wat heb je geleerd / Wat werkte goed of juist niet?
+
+**W**at heb ik nou geleerd dat is een goede vraag.
+
 
 ## **Conclusie**
  Samenvatting van de belangrijkste leerpunten.
